@@ -16,4 +16,10 @@ public class Home {
 	public String Hello() {
 		return "Hello";
 	}
+
+	@RequestMapping(value = "/Regiter")
+	public String Register() {
+		return "this is the dummy page in to show the details ";
+	}
+
 }
