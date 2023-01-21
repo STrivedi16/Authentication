@@ -1,4 +1,4 @@
-package com.aurthenticate.Response;
+package com.example.authentication.Responce;
 
 public class ErrorMessage {
 

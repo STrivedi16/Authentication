@@ -20,41 +20,47 @@ import com.example.authentication.service.CustomerUserDetailService;
 public class WebsecuityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private CustomerUserDetailService detailService;
+	private CustomerUserDetailService customerUserDetailService;
 
 	@Autowired
 	private JwtFilter filter;
 
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(detailService);
+	protected void configure(HttpSecurity http) throws Exception { // to permit the url
+
+		http.csrf() // we don't need of csrf cross site request forgery cors cross origin resource
+					// sharing
+				.disable().cors().disable().authorizeRequests() // Don't authenticate this particular request
+				.antMatchers("/token", "/register", "/hello").permitAll()
+
+				// ALL OTHER REQUEST NEED TO BE AUTHENTICATE
+				.anyRequest().authenticated().and()
+
+				// MAKE SURE WE USE STATELESS SESSION ,, SESSION WANT BE USED TO STORE USER'S
+				// STATE
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+		System.err.println("3 in web config");
+
+		// Add a filter to validate the tokens with every request
+		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
 	}
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-		http.csrf() // we don't need of cross site request forgery and cross origin resource sharing
-				.disable().cors().disable().authorizeRequests()
-				// Don't authenticate this request
-				.antMatchers("/token", "/Hello").permitAll()
-
-				// all other request need to be authenticate
-				.anyRequest().authenticated().and()
-
-				// we have to use session stateless , session want be used to store user's sate
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-		http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+		auth.userDetailsService(customerUserDetailService); // to know what aurthencate want to use;
 	}
 
 	@Bean
-	public PasswordEncoder encoder() {
+	public PasswordEncoder passwordEncoder() {
 
 		return NoOpPasswordEncoder.getInstance();
 	}
 
 	@Bean
-	public AuthenticationManager authManagerBean() throws Exception {
+	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}
 }
