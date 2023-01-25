@@ -1,14 +1,18 @@
 package com.example.authentication.entity;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,6 +29,7 @@ public class Employee implements UserDetails {
 
 	private String city;
 
+	@Column(unique = true)
 	private String email;
 
 	private String password;
@@ -33,11 +38,63 @@ public class Employee implements UserDetails {
 	@JsonIgnore
 	private Department dept;
 
+	@CreationTimestamp
+	private Timestamp creationtime;
+
+	@UpdateTimestamp
+	private Timestamp updationtime;
+
+//	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "Employee", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "Role", referencedColumnName = "id"))
+//	@JsonIgnore
+//	private List<Role> roles;
+
+	public Timestamp getCreationtime() {
+		return creationtime;
+	}
+
+	public void setCreationtime(Timestamp creationtime) {
+		this.creationtime = creationtime;
+	}
+
+	public Timestamp getUpdationtime() {
+		return updationtime;
+	}
+
+	public void setUpdationtime(Timestamp updationtime) {
+		this.updationtime = updationtime;
+	}
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
+
+//		java.util.List<SimpleGrantedAuthority> list = this.roles.stream()
+//				.map((role) -> new SimpleGrantedAuthority(role.getRole())).collect(Collectors.toList());
+
 		return null;
 	}
+
+	public Employee(int id, String name, String city, String email, String password, Department dept,
+			Timestamp creationtime, Timestamp updationtime /* List<Role> roles */) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.city = city;
+		this.email = email;
+		this.password = password;
+		this.dept = dept;
+		this.creationtime = creationtime;
+		this.updationtime = updationtime;
+		// this.roles = roles;
+	}
+//
+//	public List<Role> getRoles() {
+//		return roles;
+//	}
+//
+//	public void setRoles(List<Role> roles) {
+//		this.roles = roles;
+//	}
 
 	@Override
 	public String getUsername() {
@@ -114,16 +171,6 @@ public class Employee implements UserDetails {
 	}
 
 	public void setDept(Department dept) {
-		this.dept = dept;
-	}
-
-	public Employee(int id, String name, String city, String email, String password, Department dept) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.city = city;
-		this.email = email;
-		this.password = password;
 		this.dept = dept;
 	}
 

@@ -41,6 +41,10 @@ public class JwtTokenUtil implements Serializable {
 		return getClaimFromToken(token, Claims::getExpiration);
 	}
 
+//	public String getUseridFromToken(String token) {
+//		return getClaimFromToken(token, Claims::getId);
+//	}
+
 	public <T> T getClaimFromToken(String token, Function<Claims, T> claimResolver)
 
 	{

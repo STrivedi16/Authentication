@@ -17,9 +17,14 @@ public class Home {
 		return "Hello";
 	}
 
-	@RequestMapping(value = "/Regiter")
-	public String Register() {
-		return "this is the dummy page in to show the details ";
+	@RequestMapping(value = "/Welcome/admin", method = RequestMethod.GET)
+	public String New() {
+		return "This is only for admin";
+	}
+
+	@RequestMapping(value = "/Welcome/new", method = RequestMethod.GET)
+	public String New1() {
+		return "Only Admin can use it";
 	}
 
 }

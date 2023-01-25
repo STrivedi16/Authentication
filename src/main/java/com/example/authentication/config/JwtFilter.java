@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.example.authentication.Repository.EmployeeRepository;
+import com.example.authentication.Responce.ErrorMessage;
+import com.example.authentication.entity.Employee;
 import com.example.authentication.service.CustomerUserDetailService;
 
 @Component
@@ -28,6 +33,11 @@ public class JwtFilter extends OncePerRequestFilter // It one type of filter
 
 	@Autowired
 	private CustomerUserDetailService custmUserDetailService;
+
+	@Autowired
+	private EmployeeRepository employeeRepository;
+
+	public static int id = 0;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -47,13 +57,20 @@ public class JwtFilter extends OncePerRequestFilter // It one type of filter
 		if (requsetHeader != null && requsetHeader.startsWith("Bearer ")) {
 			jwtToken = requsetHeader.substring(7);
 			try {
-				System.err.println("123- first in filter");
+
 				username = this.jwtTokenUtil.getUsernameFromToken(jwtToken);
-				System.err.println("Token is get");
-				System.out.println(username);
+
+				System.err.println(username);
+
+				Employee employee = this.employeeRepository.findByEmailIgnoreCase(username);
+
+				id = employee.getId();
+
+				System.err.println(id);
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				new ResponseEntity<>(new ErrorMessage("Error in Token or Your Token s invelid", "Error"),
+						HttpStatus.UNAUTHORIZED);
 			}
 		} else {
 
@@ -78,7 +95,9 @@ public class JwtFilter extends OncePerRequestFilter // It one type of filter
 			// Spring Security Configurations successfully.
 			SecurityContextHolder.getContext().setAuthentication(upat);
 		} else {
-			System.out.println("Username is not valid  ");
+			System.out.println("Username is not valid 12312 ");
+
+//			response.sendError(401, "Your Token Is Not Valid");
 		}
 
 		filterChain.doFilter(request, response);

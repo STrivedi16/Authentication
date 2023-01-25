@@ -1,6 +1,7 @@
 package com.example.authentication.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.authentication.Responce.ErrorMessage;
 import com.example.authentication.config.JwtTokenUtil;
 import com.example.authentication.model.JwtRequest;
 import com.example.authentication.model.JwtResponse;
@@ -39,7 +41,9 @@ public class JwtController {
 		} catch (Exception e) {
 			e.printStackTrace();
 
-			throw new Exception("Bad creditaiol");
+			// throw new Exception("Bad creditaiol");
+
+			return new ResponseEntity<>(new ErrorMessage("Bad creditaiol", "Did Not get"), HttpStatus.NOT_ACCEPTABLE);
 
 		}
 
