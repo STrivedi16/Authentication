@@ -1,5 +1,6 @@
 package com.example.authentication.Controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,11 @@ public class Home {
 	@RequestMapping(value = "/Welcome/new", method = RequestMethod.GET)
 	public String New1() {
 		return "Only Admin can use it";
+	}
+
+	@GetMapping("/new")
+	public String new1() {
+		return "You are authorizesd";
 	}
 
 }

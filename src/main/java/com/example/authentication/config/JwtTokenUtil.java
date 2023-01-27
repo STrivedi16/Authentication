@@ -6,9 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import com.example.authentication.Repository.EmployeeRepository;
+import com.example.authentication.entity.Employee;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -19,6 +23,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 // IS EXPIRE OR NOT 
 @Component
 public class JwtTokenUtil implements Serializable {
+
+	@Autowired
+	private EmployeeRepository employeeRepository;
 
 	private static final long serialVersionUID = -2550185165626007488L;
 
@@ -69,6 +76,9 @@ public class JwtTokenUtil implements Serializable {
 	public String generateToken(UserDetails details) {
 		HashMap<String, Object> claims = new HashMap<>();
 
+		Employee employee = this.employeeRepository.findByEmailIgnoreCase(details.getUsername());
+
+		claims.put(employee.getName(), employee.getAuthorities());
 		return doGenerate(claims, details.getUsername());
 	}
 

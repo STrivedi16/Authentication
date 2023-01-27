@@ -15,4 +15,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
 	List<EmployeeId> findById(int id, Class<EmployeeId> class1);
 
+	Employee save(String employee);
+
+	// Employee save(String employee);
+
 }

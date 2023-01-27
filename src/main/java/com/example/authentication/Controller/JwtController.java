@@ -56,4 +56,15 @@ public class JwtController {
 		return ResponseEntity.ok(new JwtResponse(token));
 	}
 
+//	public ResponseEntity<?> setpassword(@RequestBody Employee employee) {
+//		System.out.println(employee);
+//		try {
+//
+//			this.authenticationManager
+//			.authenticate(new Username)
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//	}
+
 }

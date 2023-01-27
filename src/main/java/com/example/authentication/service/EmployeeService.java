@@ -35,4 +35,18 @@ public class EmployeeService {
 		return this.repository.save(employee);
 	}
 
+	public Employee forgotpass(Employee employee) throws Exception {
+
+		Employee employee2 = this.repository.findByEmailIgnoreCase(employee.getEmail());
+
+		employee2.setPassword(employee.getPassword());
+
+		System.err.println(employee2);
+
+		if (employee2 == null)
+			throw new Exception("Your email is invalid ");
+
+		return this.repository.save(employee2);
+	}
+
 }

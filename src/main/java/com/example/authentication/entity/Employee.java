@@ -2,18 +2,23 @@ package com.example.authentication.entity;
 
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,10 +49,10 @@ public class Employee implements UserDetails {
 	@UpdateTimestamp
 	private Timestamp updationtime;
 
-//	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "emp_id")
 //	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "Employee", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "Role", referencedColumnName = "id"))
-//	@JsonIgnore
-//	private List<Role> roles;
+	@JsonIgnore
+	private List<EmployeeRoleEntity> role;
 
 	public Timestamp getCreationtime() {
 		return creationtime;
@@ -68,14 +73,16 @@ public class Employee implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
-//		java.util.List<SimpleGrantedAuthority> list = this.roles.stream()
-//				.map((role) -> new SimpleGrantedAuthority(role.getRole())).collect(Collectors.toList());
+		java.util.List<SimpleGrantedAuthority> list = this.role.stream()
+				.map((role) -> new SimpleGrantedAuthority(role.toString())).collect(Collectors.toList());
 
-		return null;
+		System.err.println(list);
+
+		return list;
 	}
 
 	public Employee(int id, String name, String city, String email, String password, Department dept,
-			Timestamp creationtime, Timestamp updationtime /* List<Role> roles */) {
+			Timestamp creationtime, Timestamp updationtime, List<EmployeeRoleEntity> roles) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -85,16 +92,16 @@ public class Employee implements UserDetails {
 		this.dept = dept;
 		this.creationtime = creationtime;
 		this.updationtime = updationtime;
-		// this.roles = roles;
+		this.role = roles;
 	}
-//
-//	public List<Role> getRoles() {
-//		return roles;
-//	}
-//
-//	public void setRoles(List<Role> roles) {
-//		this.roles = roles;
-//	}
+
+	public List<EmployeeRoleEntity> getRole() {
+		return role;
+	}
+
+	public void setRole(List<EmployeeRoleEntity> role) {
+		this.role = role;
+	}
 
 	@Override
 	public String getUsername() {

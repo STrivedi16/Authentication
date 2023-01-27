@@ -34,8 +34,12 @@ public class WebsecuityConfig extends WebSecurityConfigurerAdapter {
 
 		http.csrf() // we don't need of csrf cross site request forgery cors cross origin resource
 					// sharing
-				.disable().cors().disable().authorizeRequests() // Don't authenticate this particular request
-				.antMatchers("/Welcome/**").hasRole("admin").antMatchers("/token", "/register").permitAll()
+				.disable().cors().disable().authorizeRequests()// Don't authenticate this particular request
+
+				// .antMatchers("/employee", "/Welcome/**",
+				// "/role/**").hasRole("admin").antMatchers("/Welcome/**")
+				// .hasRole("admin")
+				.antMatchers("/token", "/register", "/forgetPassword/**").permitAll()
 
 				// ALL OTHER REQUEST NEED TO BE AUTHENTICATE
 				.anyRequest().authenticated().and()

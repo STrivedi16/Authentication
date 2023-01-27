@@ -37,7 +37,7 @@ public class EmployeeController {
 
 		} catch (Exception e) {
 
-			return new ResponseEntity<>(new ErrorMessage("Email has already Stored", "Error"), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(new ErrorMessage("Email has already Stored	", "Error"), HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -86,6 +86,27 @@ public class EmployeeController {
 
 		} catch (Exception e) {
 			return new ResponseEntity<>(new ErrorMessage("Error", "Error"), HttpStatus.NOT_FOUND);
+		}
+
+	}
+
+	@PutMapping("/forgetPassword/{email}")
+	public ResponseEntity<?> Forgetpassword(@RequestBody Employee employee, @PathVariable("email") String email) {
+		try {
+
+			System.out.println(email);
+
+			System.err.println(employee);
+
+			Employee employee2 = this.service.forgotpass(employee);
+
+			System.out.println(employee2);
+
+			return new ResponseEntity<>(new Success("Password Change", "Success", employee2), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(
+					new ErrorMessage("Your password is not change,You might have enter wrong email ", "Error"),
+					HttpStatus.NOT_FOUND);
 		}
 
 	}
