@@ -17,6 +17,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
 	Employee save(String employee);
 
-	// Employee save(String employee);
+	Employee findById(int id);
 
 }

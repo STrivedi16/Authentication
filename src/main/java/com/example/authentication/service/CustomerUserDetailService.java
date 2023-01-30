@@ -1,5 +1,7 @@
 package com.example.authentication.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +24,7 @@ public class CustomerUserDetailService implements UserDetailsService {
 		try {
 			Employee employee = this.repository.findByEmailIgnoreCase(username);
 
-			return new User(employee.getEmail(), employee.getPassword(), employee.getAuthorities());
+			return new User(employee.getEmail(), employee.getPassword(), new ArrayList<>());
 
 		} catch (Exception e) {
 			e.printStackTrace();

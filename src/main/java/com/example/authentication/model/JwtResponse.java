@@ -4,6 +4,16 @@ public class JwtResponse {
 
 	String token;
 
+	String reftoken;
+
+	public String getReftoken() {
+		return reftoken;
+	}
+
+	public void setReftoken(String reftoken) {
+		this.reftoken = reftoken;
+	}
+
 	public String getToken() {
 		return token;
 	}

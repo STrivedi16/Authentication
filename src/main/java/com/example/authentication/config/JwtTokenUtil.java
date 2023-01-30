@@ -79,6 +79,7 @@ public class JwtTokenUtil implements Serializable {
 		Employee employee = this.employeeRepository.findByEmailIgnoreCase(details.getUsername());
 
 		claims.put(employee.getName(), employee.getAuthorities());
+		claims.put(employee.getCity(), employee.getUsername());
 		return doGenerate(claims, details.getUsername());
 	}
 

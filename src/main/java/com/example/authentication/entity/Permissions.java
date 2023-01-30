@@ -1,30 +1,27 @@
 package com.example.authentication.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
-public class EmployeeRoleentity {
+public class Permissions {
 
 	@Id
 	private int id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
-	private Employee employee;
+	private String permission;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
-	private Role role;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "permissions_pid")
+	private List<RolePermissionEntity> roleid;
 
 	@CreationTimestamp
 	private Timestamp creationtime;
@@ -32,37 +29,22 @@ public class EmployeeRoleentity {
 	@UpdateTimestamp
 	private Timestamp updationtime;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public EmployeeRoleentity(int id, Employee employee, Role role, Timestamp creationtime, Timestamp updationtime) {
+	public Permissions(int id, String permission, List<RolePermissionEntity> roleid, Timestamp creationtime,
+			Timestamp updationtime) {
 		super();
 		this.id = id;
-		this.employee = employee;
-		this.role = role;
+		this.permission = permission;
+		this.roleid = roleid;
 		this.creationtime = creationtime;
 		this.updationtime = updationtime;
 	}
 
-	public Employee getEmployee() {
-		return employee;
+	public List<RolePermissionEntity> getRoleid() {
+		return roleid;
 	}
 
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
+	public void setRoleid(List<RolePermissionEntity> roleid) {
+		this.roleid = roleid;
 	}
 
 	public Timestamp getCreationtime() {
@@ -81,7 +63,23 @@ public class EmployeeRoleentity {
 		this.updationtime = updationtime;
 	}
 
-	public EmployeeRoleentity() {
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getPermission() {
+		return permission;
+	}
+
+	public void setPermission(String permission) {
+		this.permission = permission;
+	}
+
+	public Permissions() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

@@ -1,14 +1,16 @@
 package com.example.authentication.entity;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,17 +18,51 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Role {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	int id;
+	// @GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 
-	String role;
+	private String role;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role_id")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role")
 	@JsonIgnore
-	List<EmployeeRoleEntity> emp;
+	private List<EmployeeRoleentity> emp;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "role_id")
-	private List<permission> permission;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "role_rid")
+	@JsonIgnore
+	private List<RolePermissionEntity> permisionid;
+
+	@CreationTimestamp
+	private Timestamp creationtime;
+
+	@UpdateTimestamp
+	private Timestamp updationtime;
+
+	public Role(int id, String role, List<EmployeeRoleentity> emp, List<RolePermissionEntity> permisionid,
+			Timestamp creationtime, Timestamp updationtime) {
+		super();
+		this.id = id;
+		this.role = role;
+		this.emp = emp;
+		this.permisionid = permisionid;
+		this.creationtime = creationtime;
+		this.updationtime = updationtime;
+	}
+
+	public Timestamp getCreationtime() {
+		return creationtime;
+	}
+
+	public void setCreationtime(Timestamp creationtime) {
+		this.creationtime = creationtime;
+	}
+
+	public Timestamp getUpdationtime() {
+		return updationtime;
+	}
+
+	public void setUpdationtime(Timestamp updationtime) {
+		this.updationtime = updationtime;
+	}
 
 	public int getId() {
 		return id;
@@ -58,6 +94,22 @@ public class Role {
 	@Override
 	public String toString() {
 		return "Role [id=" + id + ", role=" + role + ", emp=" + emp + "]";
+	}
+
+	public List<EmployeeRoleentity> getEmp() {
+		return emp;
+	}
+
+	public void setEmp(List<EmployeeRoleentity> emp) {
+		this.emp = emp;
+	}
+
+	public List<RolePermissionEntity> getPermisionid() {
+		return permisionid;
+	}
+
+	public void setPermisionid(List<RolePermissionEntity> permisionid) {
+		this.permisionid = permisionid;
 	}
 
 }

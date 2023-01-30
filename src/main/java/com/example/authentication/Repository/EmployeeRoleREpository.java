@@ -3,9 +3,9 @@ package com.example.authentication.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.authentication.entity.EmployeeRoleEntity;
+import com.example.authentication.entity.EmployeeRoleentity;
 
 @Repository
-public interface EmployeeRoleREpository extends JpaRepository<EmployeeRoleEntity, Integer> {
+public interface EmployeeRoleRepository extends JpaRepository<EmployeeRoleentity, Integer> {
 
 }

@@ -37,6 +37,9 @@ public class JwtFilter extends OncePerRequestFilter // It one type of filter
 	@Autowired
 	private EmployeeRepository employeeRepository;
 
+	@Autowired
+	private JwtRefreshToken refreshToken;
+
 	public static int id = 0;
 
 	@Override
@@ -53,12 +56,20 @@ public class JwtFilter extends OncePerRequestFilter // It one type of filter
 
 		String jwtToken = null;
 
+		String reftoken = null;
+
+		String str = null;
+
 		// CHECKIN NULL AND FORMAT
 		if (requsetHeader != null && requsetHeader.startsWith("Bearer ")) {
 			jwtToken = requsetHeader.substring(7);
 			try {
 
 				username = this.jwtTokenUtil.getUsernameFromToken(jwtToken);
+
+				str = this.refreshToken.getValidation(jwtToken);
+
+				System.out.println(str);
 
 				System.err.println(username);
 

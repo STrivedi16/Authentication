@@ -3,7 +3,6 @@ package com.example.authentication.entity;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,18 +11,21 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@SQLDelete(sql = "update Employee set is_active=false where id=?")
+@Where(clause = "is_active=true")
 public class Employee implements UserDetails {
 
 	@Id
@@ -49,10 +51,12 @@ public class Employee implements UserDetails {
 	@UpdateTimestamp
 	private Timestamp updationtime;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "emp_id")
+	private boolean is_active = true;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "employee")
 //	@JoinTable(name = "employee_role", joinColumns = @JoinColumn(name = "Employee", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "Role", referencedColumnName = "id"))
 	@JsonIgnore
-	private List<EmployeeRoleEntity> role;
+	private List<EmployeeRoleentity> role;
 
 	public Timestamp getCreationtime() {
 		return creationtime;
@@ -73,16 +77,16 @@ public class Employee implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
-		java.util.List<SimpleGrantedAuthority> list = this.role.stream()
-				.map((role) -> new SimpleGrantedAuthority(role.toString())).collect(Collectors.toList());
+//		java.util.List<SimpleGrantedAuthority> list = this.role.stream()
+//				.map((role) -> new SimpleGrantedAuthority(role.toString())).collect(Collectors.toList());
+//
+//		System.err.println(list);
 
-		System.err.println(list);
-
-		return list;
+		return null;
 	}
 
 	public Employee(int id, String name, String city, String email, String password, Department dept,
-			Timestamp creationtime, Timestamp updationtime, List<EmployeeRoleEntity> roles) {
+			Timestamp creationtime, Timestamp updationtime, List<EmployeeRoleentity> roles) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -95,11 +99,11 @@ public class Employee implements UserDetails {
 		this.role = roles;
 	}
 
-	public List<EmployeeRoleEntity> getRole() {
+	public List<EmployeeRoleentity> getRole() {
 		return role;
 	}
 
-	public void setRole(List<EmployeeRoleEntity> role) {
+	public void setRole(List<EmployeeRoleentity> role) {
 		this.role = role;
 	}
 
@@ -192,7 +196,12 @@ public class Employee implements UserDetails {
 				+ password + ", dept=" + dept + "]";
 	}
 
-//	@ManyToMany(cascade = CascadeType.ALL)
-	// private Role role;
+	public boolean isIs_active() {
+		return is_active;
+	}
+
+	public void setIs_active(boolean is_active) {
+		this.is_active = is_active;
+	}
 
 }

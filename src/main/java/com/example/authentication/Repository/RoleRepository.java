@@ -8,4 +8,5 @@ import com.example.authentication.entity.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
+	Role findById(int id);
 }
