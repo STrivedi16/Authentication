@@ -1,6 +1,8 @@
 package com.example.authentication.Controller;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,15 +27,40 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService service;
 
+	@Autowired
+	private PasswordRegax regax;
+
 	public JwtFilter filter = new JwtFilter();
 
 	@PostMapping("/register")
 	public ResponseEntity<?> registeremp(@RequestBody Employee employee) {
 		try {
 
-			Employee employee2 = this.service.register(employee);
+			System.err.println(employee.getPassword());
 
-			return new ResponseEntity<>(new Success("Successfull", "Success", employee2), HttpStatus.OK);
+			Pattern p = Pattern.compile("((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20})");
+
+			// Matcher matcher = regax.pattern.matcher(employee.getPassword());
+
+			System.err.println("now we can get the password");
+
+			Matcher matcher = p.matcher(employee.getPassword());
+
+			System.err.println(matcher.matches());
+
+			if (matcher.matches()) {
+
+				System.err.println("in if condition");
+
+				Employee employee2 = this.service.register(employee);
+
+				return new ResponseEntity<>(new Success("Successfull", "Success", employee2), HttpStatus.OK);
+
+			} else {
+				return new ResponseEntity<>(new ErrorMessage(
+						"Your Password is invalid ,Password Contain Atleast one Digit , one Letter, One Spcial Char, one Uppercase Leter",
+						"Error"), HttpStatus.NOT_ACCEPTABLE);
+			}
 
 		} catch (Exception e) {
 

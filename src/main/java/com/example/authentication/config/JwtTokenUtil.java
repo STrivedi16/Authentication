@@ -31,6 +31,8 @@ public class JwtTokenUtil implements Serializable {
 
 	private static final long JWT_TOEKN_VALIDITY = 5 * 60 * 60;
 
+	private static final String TYPE = "Access";
+
 //	private String secret = "Java@2711";
 
 	@Value("${jwt.secret}")
@@ -66,6 +68,12 @@ public class JwtTokenUtil implements Serializable {
 		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 	}
 
+	// TO GET THE TYPE FROM TOKEN
+	public String getTypeFromToken(String token) {
+		Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+		return (String) claims.get("Type");
+	}
+
 	// CHECK THE TOKEN IS EXPIRED OR NOT
 	public boolean isTokenExpire(String token) {
 		final Date expiration = getExpirationDateFromToken(token);
@@ -78,8 +86,10 @@ public class JwtTokenUtil implements Serializable {
 
 		Employee employee = this.employeeRepository.findByEmailIgnoreCase(details.getUsername());
 
+		claims.put("Type", TYPE);
+
 		claims.put(employee.getName(), employee.getAuthorities());
-		claims.put(employee.getCity(), employee.getUsername());
+		claims.put("UserName", employee.getUsername());
 		return doGenerate(claims, details.getUsername());
 	}
 

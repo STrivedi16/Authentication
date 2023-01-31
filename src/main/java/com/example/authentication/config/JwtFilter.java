@@ -56,29 +56,32 @@ public class JwtFilter extends OncePerRequestFilter // It one type of filter
 
 		String jwtToken = null;
 
-		String reftoken = null;
-
-		String str = null;
+		String type = null;
 
 		// CHECKIN NULL AND FORMAT
 		if (requsetHeader != null && requsetHeader.startsWith("Bearer ")) {
+
 			jwtToken = requsetHeader.substring(7);
 			try {
 
-				username = this.jwtTokenUtil.getUsernameFromToken(jwtToken);
+				type = this.jwtTokenUtil.getTypeFromToken(jwtToken);
 
-				str = this.refreshToken.getValidation(jwtToken);
+				System.out.println(type);
 
-				System.out.println(str);
+				if (type.equals("Access")) {
 
-				System.err.println(username);
+					username = this.jwtTokenUtil.getUsernameFromToken(jwtToken);
 
-				Employee employee = this.employeeRepository.findByEmailIgnoreCase(username);
+					System.err.println(username);
 
-				id = employee.getId();
+					Employee employee = this.employeeRepository.findByEmailIgnoreCase(username);
 
-				System.err.println(id);
+					id = employee.getId();
 
+					System.err.println(id);
+				} else {
+					System.out.println("Error");
+				}
 			} catch (Exception e) {
 				new ResponseEntity<>(new ErrorMessage("Error in Token or Your Token s invelid", "Error"),
 						HttpStatus.UNAUTHORIZED);
@@ -91,7 +94,8 @@ public class JwtFilter extends OncePerRequestFilter // It one type of filter
 
 		// security
 
-		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null
+				&& type.equals("Access")) {
 
 			// GET USER DETAILS OF USER
 			UserDetails details = this.custmUserDetailService.loadUserByUsername(username);
@@ -105,6 +109,7 @@ public class JwtFilter extends OncePerRequestFilter // It one type of filter
 			// that the current user is authenticated. So it passes the
 			// Spring Security Configurations successfully.
 			SecurityContextHolder.getContext().setAuthentication(upat);
+
 		} else {
 			System.out.println("Username is not valid 12312 ");
 

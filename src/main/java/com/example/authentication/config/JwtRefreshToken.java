@@ -21,6 +21,8 @@ public class JwtRefreshToken implements Serializable {
 
 	public static Boolean ref = true;
 
+	private final String TYPE = "refresh";
+
 	@Value("${jwt.secret}")
 	private String secret;
 
@@ -33,8 +35,9 @@ public class JwtRefreshToken implements Serializable {
 
 	}
 
-	public String getValidation(String reftoken) {
-		return getClaimsFromReftoken(reftoken, Claims::getId);
+	public String getTypeFromToken(String token) {
+		Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+		return (String) claims.get("Type");
 	}
 
 	public <T> T getClaimsFromReftoken(String reftoken, Function<Claims, T> claimresolver) {
@@ -51,12 +54,13 @@ public class JwtRefreshToken implements Serializable {
 
 		HashMap<String, Object> claims = new HashMap<>();
 
-		claims.put("123", ref);
-		return dogenerate(claims, details.getUsername(), ref);
+		claims.put("Type", TYPE);
+		return dogenerate(claims, details.getUsername());
 
 	}
 
-	private String dogenerate(Map<String, Object> claims, String object, Boolean t) {
+	// .claim("Type", Type)
+	private String dogenerate(Map<String, Object> claims, String object) {
 		return Jwts.builder().setClaims(claims).setSubject(object).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_Refresh_token_validity * 1000))
 				.signWith(SignatureAlgorithm.HS512, secret).compact();

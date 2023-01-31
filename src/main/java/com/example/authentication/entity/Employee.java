@@ -204,4 +204,7 @@ public class Employee implements UserDetails {
 		this.is_active = is_active;
 	}
 
+//	Pattern p = Pattern.compile("((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8-20})");
+//	Matcher m = p.matcher(password);
+
 }

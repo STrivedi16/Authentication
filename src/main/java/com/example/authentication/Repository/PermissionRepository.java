@@ -8,4 +8,5 @@ import com.example.authentication.entity.Permissions;
 @Repository
 public interface PermissionRepository extends JpaRepository<Permissions, Integer> {
 
+	Permissions findById(int id);
 }
