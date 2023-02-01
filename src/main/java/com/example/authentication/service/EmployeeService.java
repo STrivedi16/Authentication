@@ -1,11 +1,13 @@
 package com.example.authentication.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import com.example.authentication.Interface.EmployeeId;
+import com.example.authentication.Interface.EmployeeToPermission;
 import com.example.authentication.Repository.EmployeeRepository;
 import com.example.authentication.entity.Employee;
 
@@ -26,10 +28,12 @@ public class EmployeeService {
 
 	}
 
-	public List<EmployeeId> GetById(int id) {
-
-		return this.repository.findById(id, EmployeeId.class);
-	}
+//	public List<EmployeeId> GetById(int id) {
+//
+//		System.err.println(id + "this is id ");
+//
+//		return this.repository.findById(id, EmployeeId.class);
+//	}
 
 	public Employee Update(Employee employee) {
 		return this.repository.save(employee);
@@ -49,4 +53,32 @@ public class EmployeeService {
 		return this.repository.save(employee2);
 	}
 
+	public List<EmployeeToPermission> getemp() {
+		return this.repository.findAll(EmployeeToPermission.class);
+	}
+
+	public ArrayList<SimpleGrantedAuthority> getAutorities(int id) {
+
+		ArrayList<SimpleGrantedAuthority> auth = new ArrayList<>();
+		if (id + "permission" != null) {
+
+			ArrayList<SimpleGrantedAuthority> auth1 = new ArrayList<>();
+			List<EmployeeToPermission> al = this.repository.findById(id, EmployeeToPermission.class);
+
+			ArrayList<String> authorities = new ArrayList<>();
+
+			authorities.add(al.toString());
+
+			System.err.println(authorities);
+
+			al.forEach(e -> {
+				auth1.add(new SimpleGrantedAuthority("ROLE_" + e.getPermission()));
+			});
+
+			auth = auth1;
+
+		}
+		return auth;
+
+	}
 }

@@ -1,5 +1,6 @@
 package com.example.authentication.Controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +24,7 @@ public class Home {
 		return "This is only for admin";
 	}
 
+	@PreAuthorize("hasRole('Admin')")
 	@RequestMapping(value = "/Welcome/new", method = RequestMethod.GET)
 	public String New1() {
 		return "Only Admin can use it";

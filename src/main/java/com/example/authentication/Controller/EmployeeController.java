@@ -1,5 +1,6 @@
 package com.example.authentication.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,6 +8,7 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.authentication.Interface.EmployeeId;
+import com.example.authentication.Interface.EmployeeToPermission;
 import com.example.authentication.Responce.ErrorMessage;
 import com.example.authentication.Responce.Success;
 import com.example.authentication.config.JwtFilter;
@@ -67,30 +69,31 @@ public class EmployeeController {
 			return new ResponseEntity<>(new ErrorMessage("Email has already Stored	", "Error"), HttpStatus.NOT_FOUND);
 		}
 	}
-
-	@GetMapping("/employee/{id}")
-	public ResponseEntity<?> getinid(@PathVariable("id") int id) {
-		try {
-
-			int as = filter.id;
-
-			System.err.println(as);
-
-			if (as == id) {
-
-				List<EmployeeId> list = this.service.GetById(id);
-
-				return new ResponseEntity<>(new Success("Success", "successfull", list), HttpStatus.OK);
-			} else {
-				return new ResponseEntity<>(
-						new ErrorMessage("please enter Your id , you cannot Access Other Details", "Not  "),
-						HttpStatus.NOT_FOUND);
-			}
-		} catch (Exception e) {
-
-			return new ResponseEntity<>(new ErrorMessage("User Not Foud", "Error"), HttpStatus.NOT_FOUND);
-		}
-	}
+//
+//	@GetMapping("/employee/{id}")
+//	public ResponseEntity<?> getinid(@PathVariable("id") int id) {
+//		try {
+//
+//			int as = filter.id;
+//
+//			System.err.println(as);
+//
+//			if (as == id) {
+//
+//				System.err.println("123456789");
+//				List<EmployeeId> list = this.service.GetById(id);
+//
+//				return new ResponseEntity<>(new Success("Success", "successfull", list), HttpStatus.OK);
+//			} else {
+//				return new ResponseEntity<>(
+//						new ErrorMessage("please enter Your id , you cannot Access Other Details", "Not  "),
+//						HttpStatus.NOT_FOUND);
+//			}
+//		} catch (Exception e) {
+//
+//			return new ResponseEntity<>(new ErrorMessage("User Not Foud", "Error"), HttpStatus.NOT_FOUND);
+//		}
+//	}
 
 	@PutMapping("/id")
 	public ResponseEntity<?> update(@RequestBody Employee employee, @PathVariable("id") int id) {
@@ -137,4 +140,37 @@ public class EmployeeController {
 		}
 
 	}
+
+	public List<EmployeeToPermission> list;
+
+	@GetMapping("/get")
+	public ResponseEntity<?> getall() {
+		try {
+
+			list = this.service.getemp();
+
+			return new ResponseEntity<>(new Success("Success", "success", list), HttpStatus.OK);
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(new ErrorMessage("Error", "Error in Emp role list"), HttpStatus.NOT_FOUND);
+		}
+	}
+
+	public ArrayList<SimpleGrantedAuthority> al;
+
+	@GetMapping("/get/{id}")
+	public ResponseEntity<?> getpermission(@PathVariable("id") int id) {
+		try {
+
+			al = this.service.getAutorities(id);
+
+			return new ResponseEntity<>(new Success("Success", "success", al), HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ErrorMessage("Error in permission", "Error in  role list"),
+					HttpStatus.NOT_FOUND);
+
+		}
+	}
+
 }

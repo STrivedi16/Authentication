@@ -74,13 +74,23 @@ public class Employee implements UserDetails {
 		this.updationtime = updationtime;
 	}
 
+//	@Autowired
+//	private EmployeeService service;
+
+//	@Autowired
+//	private EmployeeController controller;
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 
-//		java.util.List<SimpleGrantedAuthority> list = this.role.stream()
-//				.map((role) -> new SimpleGrantedAuthority(role.toString())).collect(Collectors.toList());
+//		EmployeeController controller = new EmployeeController();
 //
-//		System.err.println(list);
+//		ArrayList<SimpleGrantedAuthority> al = controller.al;
+
+		// List<EmployeeToPermission> list = this.service.getemp();
+		// java.util.List<SimpleGrantedAuthority> list = al.stream()
+		// .map((role) -> new
+		// SimpleGrantedAuthority(role.getPermission())).collect(Collectors.toList());
 
 		return null;
 	}

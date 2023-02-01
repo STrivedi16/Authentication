@@ -8,4 +8,5 @@ import com.example.authentication.entity.RolePermissionEntity;
 @Repository
 public interface RolePermissionRepository extends JpaRepository<RolePermissionEntity, Integer> {
 
+	// ArrayList<String> getPermissionByEmployeeId(int id);
 }

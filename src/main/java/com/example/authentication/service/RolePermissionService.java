@@ -38,4 +38,10 @@ public class RolePermissionService {
 		return this.repository.save(entity);
 
 	}
+
+	public java.util.List<RolePermissionEntity> getrolepermission() {
+
+		return this.repository.findAll();
+	}
+
 }
