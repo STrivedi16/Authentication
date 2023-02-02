@@ -17,6 +17,9 @@ public class EmployeeService {
 	@Autowired
 	private EmployeeRepository repository;
 
+//	@Autowired
+//	private RolePermissionInterface interface1;
+
 	public Employee register(Employee employee) throws Exception {
 
 		Employee employee2 = this.repository.findByEmailIgnoreCase(employee.getEmail());
@@ -58,22 +61,22 @@ public class EmployeeService {
 	}
 
 	public ArrayList<SimpleGrantedAuthority> getAutorities(int id) {
-
+		System.err.println(id);
 		ArrayList<SimpleGrantedAuthority> auth = new ArrayList<>();
 		if (id + "permission" != null) {
 
 			ArrayList<SimpleGrantedAuthority> auth1 = new ArrayList<>();
-			List<EmployeeToPermission> al = this.repository.findById(id, EmployeeToPermission.class);
+			System.err.println(auth1);
+			List<EmployeeToPermission> list = this.repository.findById(id, EmployeeToPermission.class);
+			System.err.println(list);
+//			ArrayList<String> authorities = new ArrayList<>();
 
-			ArrayList<String> authorities = new ArrayList<>();
-
-			authorities.add(al.toString());
-
-			System.err.println(authorities);
-
-			al.forEach(e -> {
-				auth1.add(new SimpleGrantedAuthority("ROLE_" + e.getPermission()));
+			list.forEach(e -> {
+				System.out.println(e);
+				auth1.add(new SimpleGrantedAuthority(e.getPermission()));
 			});
+
+			System.err.println(auth);
 
 			auth = auth1;
 

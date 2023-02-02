@@ -21,6 +21,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.authentication.service.EmployeeService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -75,9 +76,6 @@ public class Employee implements UserDetails {
 	}
 
 //	@Autowired
-//	private EmployeeService service;
-
-//	@Autowired
 //	private EmployeeController controller;
 
 	@Override
@@ -85,12 +83,21 @@ public class Employee implements UserDetails {
 
 //		EmployeeController controller = new EmployeeController();
 //
-//		ArrayList<SimpleGrantedAuthority> al = controller.al;
+		// ArrayList<SimpleGrantedAuthority> al = controller.al;
 
 		// List<EmployeeToPermission> list = this.service.getemp();
 		// java.util.List<SimpleGrantedAuthority> list = al.stream()
 		// .map((role) -> new
 		// SimpleGrantedAuthority(role.getPermission())).collect(Collectors.toList());
+
+		EmployeeService employeeService = new EmployeeService();
+//
+//		// employeeService.getAutorities(id);
+
+		// ArrayList<SimpleGrantedAuthority> al =employeeService.getAutorities(id);
+
+//
+//		al.forEach(e -> e.getAuthority());
 
 		return null;
 	}

@@ -18,7 +18,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
 	// List<EmployeeId> findById(int id, Class<EmployeeId> class1);
 
-	@Query(value = "select emp.name , emp.id, r.role, p.permission from employee emp\r\n"
+	@Query(value = "select  emp.id, r.role, p.permission from employee emp\r\n"
 			+ "join employee_roleentity emr on emp.id = emr.employee_id\r\n" + "join role r on emr.role_id= r.id\r\n"
 			+ "join role_permission_entity rpe on r.id= rpe.role_rid_id\r\n"
 			+ "join permissions p on p.id= rpe.permissions_pid_id  where emp.id= :idnumber", nativeQuery = true)

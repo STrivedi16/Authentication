@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -17,7 +18,7 @@ import com.example.authentication.service.CustomerUserDetailService;
 
 @Configuration // TO GENERATE BEAN AND WHILE EXCUTION TO ADD BEAN
 @EnableWebSecurity // TO PROVIDE A SECURUTY
-
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebsecuityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -42,7 +43,7 @@ public class WebsecuityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/token", "/register", "/forgetPassword/**").permitAll()
 
 				// ALL OTHER REQUEST NEED TO BE AUTHENTICATE
-				.anyRequest().authenticated().and()
+				.anyRequest().authenticated().and().httpBasic().and()
 
 				// MAKE SURE WE USE STATELESS SESSION ,, SESSION WANT BE USED TO STORE USER'S
 				// STATE

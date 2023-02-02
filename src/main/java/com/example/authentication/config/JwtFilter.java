@@ -99,7 +99,7 @@ public class JwtFilter extends OncePerRequestFilter // It one type of filter
 
 			// GET USER DETAILS OF USER
 			UserDetails details = this.custmUserDetailService.loadUserByUsername(username);
-
+			System.err.println("This is authorities" + details.getAuthorities());
 			UsernamePasswordAuthenticationToken upat = new UsernamePasswordAuthenticationToken(details, null,
 					details.getAuthorities());
 

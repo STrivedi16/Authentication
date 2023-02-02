@@ -24,15 +24,15 @@ public class Home {
 		return "This is only for admin";
 	}
 
-	@PreAuthorize("hasRole('Admin')")
 	@RequestMapping(value = "/Welcome/new", method = RequestMethod.GET)
 	public String New1() {
 		return "Only Admin can use it";
 	}
 
-	@GetMapping("/new")
-	public String new1() {
-		return "You are authorizesd";
+	@GetMapping("/admins")
+	@PreAuthorize("hasAuthority('getall')")
+	public String adminaccess() {
+		return "Hello page is get then it means You have Access if Not Then You Don't Have Access ";
 	}
 
 }
