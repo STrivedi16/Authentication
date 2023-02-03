@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -143,18 +144,18 @@ public class EmployeeController {
 
 	public List<EmployeeToPermission> list;
 
-	@GetMapping("/get")
-	public ResponseEntity<?> getall() {
-		try {
-
-			list = this.service.getemp();
-
-			return new ResponseEntity<>(new Success("Success", "success", list), HttpStatus.OK);
-		} catch (Exception e) {
-
-			return new ResponseEntity<>(new ErrorMessage("Error", "Error in Emp role list"), HttpStatus.NOT_FOUND);
-		}
-	}
+//	@GetMapping("/get")
+//	public ResponseEntity<?> getall() {
+//		try {
+//
+//			list = this.service.getemp();
+//
+//			return new ResponseEntity<>(new Success("Success", "success", list), HttpStatus.OK);
+//		} catch (Exception e) {
+//
+//			return new ResponseEntity<>(new ErrorMessage("Error", "Error in Emp role list"), HttpStatus.NOT_FOUND);
+//		}
+//	}
 
 	public ArrayList<SimpleGrantedAuthority> al;
 
@@ -171,6 +172,41 @@ public class EmployeeController {
 					HttpStatus.NOT_FOUND);
 
 		}
+	}
+
+	@GetMapping("/get")
+	@PreAuthorize("hasAuthority	('getall')")
+	public ResponseEntity<?> getAlldata() {
+
+		try {
+
+			List<Employee> list = this.service.getall();
+
+			return new ResponseEntity<>(new Success("Success", "success", list), HttpStatus.OK);
+
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(new ErrorMessage("Error in list", "Problem To Getting List"),
+					HttpStatus.NOT_FOUND);
+		}
+
+	}
+
+	@GetMapping("/employee/{id}")
+	@PreAuthorize("hasAuthority	('getbyid')")
+	public ResponseEntity<?> getid(@PathVariable("id") int id) {
+		try {
+
+			Employee employee = this.service.getByid(id);
+
+			return new ResponseEntity<>(new Success("Success", "success", employee), HttpStatus.OK);
+
+		} catch (Exception e) {
+
+			return new ResponseEntity<>(new ErrorMessage(" Your Id not valid   ", "employee id not get"),
+					HttpStatus.NOT_FOUND);
+		}
+
 	}
 
 }

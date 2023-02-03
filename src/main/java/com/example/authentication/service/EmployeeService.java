@@ -56,9 +56,9 @@ public class EmployeeService {
 		return this.repository.save(employee2);
 	}
 
-	public List<EmployeeToPermission> getemp() {
-		return this.repository.findAll(EmployeeToPermission.class);
-	}
+//	public List<EmployeeToPermission> getemp() {
+//		return this.repository.findAll(EmployeeToPermission.class);
+//	}
 
 	public ArrayList<SimpleGrantedAuthority> getAutorities(int id) {
 		System.err.println(id);
@@ -83,5 +83,14 @@ public class EmployeeService {
 		}
 		return auth;
 
+	}
+
+	public List<Employee> getall() {
+		return this.repository.findAll();
+	}
+
+	public Employee getByid(int id) {
+
+		return this.repository.findById(id);
 	}
 }

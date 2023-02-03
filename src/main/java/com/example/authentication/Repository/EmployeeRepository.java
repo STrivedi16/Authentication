@@ -1,6 +1,5 @@
 package com.example.authentication.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,7 +32,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 			+ "join role_permission_entity rpe on r.id= rpe.role_rid_id\r\n"
 			+ "join permissions p on p.id= rpe.permissions_pid_id", nativeQuery = true)
 	List<EmployeeToPermission> findAll(Class<EmployeeToPermission> class1);
-
-	ArrayList<String> getPermissionById(int id);
 
 }

@@ -30,7 +30,7 @@ public class Home {
 	}
 
 	@GetMapping("/admins")
-	@PreAuthorize("hasAuthority('getall')")
+	@PreAuthorize("hasAuthority	('getall')")
 	public String adminaccess() {
 		return "Hello page is get then it means You have Access if Not Then You Don't Have Access ";
 	}
